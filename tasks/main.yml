@@ -1,0 +1,61 @@
+---
+
+- name: "Create {{ ct_hostname }}"
+  proxmox:
+    api_user: "{{ proxmox_api_user }}"
+    api_password: "{{ proxmox_api_password }}"
+    api_host: "{{ proxmox_api_host }}"
+    node: "{{ proxmox_node }}"
+    hostname: "{{ ct_hostname }}"
+    state: present
+    pubkey: "{{ ct_key }}"
+    validate_certs: no
+    ostemplate: "{{ ct_template }}"
+    netif: "{{ ct_network }}"
+    cpus: "{{ ct_cpus }}"
+    cores: "{{ ct_cores }}"
+    cpuunits: "{{ ct_cpuunits }}"
+    disk: "{{ ct_disk }}"
+    memory: "{{ ct_memory }}"
+    onboot: "{{ ct_onboot }}"
+    swap: "{{ ct_swap }}"
+    vmid: "{{ ct_vmid | default(omit) }}"
+    unprivileged: "{{ ct_unprivileged }}"
+  delegate_to: localhost
+  register: ct_created
+
+- name: "Wait for {{ ct_hostname }} creation"
+  delegate_to: localhost
+  wait_for:
+    timeout: "{{ creation_timeout }}"
+  when: ct_created|changed
+
+- name: "Start {{ ct_hostname }}"
+  proxmox:
+    api_user: "{{ proxmox_api_user }}"
+    api_password: "{{ proxmox_api_password }}"
+    api_host: "{{ proxmox_api_host }}"
+    hostname: "{{ ct_hostname }}"
+    node: "{{ proxmox_node }}"
+    state: started
+  delegate_to: localhost
+  register: ct_started
+
+- name: "Wait for {{ ct_hostname }} start"
+  delegate_to: localhost
+  wait_for:
+    timeout: "{{ starting_timeout }}"
+  when: ct_started|changed
+
+- name: Ping outside
+  shell: "lxc-attach  -n {{ ct_started.msg[3:6] }} -- ping {{ ping_server }} -c 2"
+  when: ct_created|changed
+  delegate_to: qd-01
+
+- name: "Wait for {{ ct_hostname }} network"
+  delegate_to: localhost
+  wait_for:
+    port: 22
+    host: "{{ inventory_hostname }}"
+    search_regex: OpenSSH
+    timeout: "{{ network_timeout }}"

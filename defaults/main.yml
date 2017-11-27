@@ -1,0 +1,14 @@
+---
+
+ct_cores: 1
+ct_cpus: 1
+ct_cpuunits: 1000
+ct_disk: 3
+ct_memory: 512
+ct_onboot: yes
+ct_swap: 0
+
+ping_server: 8.8.8.8
+creation_timeout: 10
+starting_timeout: 5
+network_timeout: 60
