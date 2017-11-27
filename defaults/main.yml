@@ -1,0 +1,16 @@
+---
+
+ct_cpus: 1
+ct_cores: 1
+ct_cpuunits: 1000
+ct_disk: 3
+ct_memory: 512
+ct_onboot: yes
+ct_swap: 0
+ct_network: {"net0":"name=eth0,bridge=vmbr0,ip=dhcp"}
+ct_unprivileged: yes
+
+ping_server: 8.8.8.8
+creation_timeout: 10
+starting_timeout: 5
+network_timeout: 60
