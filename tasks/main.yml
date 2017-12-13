@@ -47,6 +47,7 @@
     timeout: "{{ starting_timeout }}"
   when: ct_started|changed
 
+# The container is not properly configured on pfsense without a network access
 - name: Ping outside
   shell: "lxc-attach  -n {{ ct_started.msg[3:6] }} -- ping {{ ping_server }} -c 2"
   when: ct_created|changed
