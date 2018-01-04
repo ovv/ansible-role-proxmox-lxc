@@ -3,6 +3,7 @@
 ct_cores: 1
 ct_cpus: 1
 ct_cpuunits: 1000
+ct_storage: local
 ct_disk: 3
 ct_memory: 512
 ct_onboot: yes

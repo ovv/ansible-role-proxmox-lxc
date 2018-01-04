@@ -15,6 +15,7 @@
     cpus: "{{ ct_cpus }}"
     cores: "{{ ct_cores }}"
     cpuunits: "{{ ct_cpuunits }}"
+    storage: "{{ ct_storage }}"
     disk: "{{ ct_disk }}"
     memory: "{{ ct_memory }}"
     onboot: "{{ ct_onboot }}"
