@@ -29,7 +29,7 @@
   delegate_to: localhost
   wait_for:
     timeout: "{{ creation_timeout }}"
-  when: ct_created|changed
+  when: ct_created is changed
 
 - name: "Start {{ ct_hostname }}"
   proxmox:
@@ -46,12 +46,12 @@
   delegate_to: localhost
   wait_for:
     timeout: "{{ starting_timeout }}"
-  when: ct_started|changed
+  when: ct_started is changed
 
 # The container is not properly configured on pfsense without a network access
 - name: Ping outside
   shell: "lxc-attach  -n {{ ct_started.msg[3:6] }} -- ping {{ ping_server }} -c 2"
-  when: ct_created|changed
+  when: ct_created is changed
   delegate_to: sys-1.quentindawans.com
 
 - name: "Wait for {{ ct_hostname }} network"
