@@ -52,7 +52,7 @@
 - name: Ping outside
   shell: "lxc-attach  -n {{ ct_started.msg[3:6] }} -- ping {{ ping_server }} -c 2"
   when: ct_created is changed
-  delegate_to: sys-1.quentindawans.com
+  delegate_to: "{{ proxmox_node }}.quentindawans.com"
 
 - name: "Wait for {{ ct_hostname }} network"
   delegate_to: localhost
